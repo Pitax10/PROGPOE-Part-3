@@ -10,7 +10,7 @@ public class QuickChatApp {
         // Use Nested loop ("if" inside "for" loop)
         int sentCount = 0;
         for (int i = 0; i < numMessages; ) {
-            System.out.println("\n1) Send Messages\n2) Show recently sent messages\n3) Quit");
+            System.out.println("\n1) Send Messages\n2) Show recently sent messages\n3) Quit\n4 Stored Messages");
             System.out.print("Select: ");
             int choice = Integer.parseInt(sc.nextLine());
 
@@ -19,6 +19,26 @@ public class QuickChatApp {
                 break;
             }
             if (choice == 2) { System.out.println("Coming Soon."); continue; }
+            
+            if (choice == 4) {
+                System.out.println("a) Sender/Recipient\nb) Longest\nc) Search by ID\nd) Search by Recipient\ne) Delete by Hash\nf) Report");
+            String opt = sc.nextLine();
+            if (opt.equalsIgnoreCase("a")) {
+                System.out.println(Message.displaySenderAndRecipient()); }
+            if (opt.equalsIgnoreCase("b")) {
+               System.out.println(Message.getLongestMessage()); }
+            if (opt.equalsIgnoreCase("c")) { 
+                System.out.print("Enter ID: "); System.out.println(Message.searchByMessageID(sc.nextLine())); }
+            if (opt.equalsIgnoreCase("d")) { 
+                System.out.print("Enter Recipient: "); 
+                System.out.println(Message.searchByRecipient(sc.nextLine())); }
+            if (opt.equalsIgnoreCase("e")) { 
+                System.out.print("Enter Hash: "); 
+                System.out.println(Message.deleteByHash(sc.nextLine())); }
+            if (opt.equalsIgnoreCase("f")) {
+                System.out.println(Message.displayReport()); }
+            continue;
+}
 
             System.out.print("Enter recipient (+277...): ");
             String rec = sc.nextLine();

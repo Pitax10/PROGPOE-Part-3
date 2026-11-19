@@ -1,64 +1,51 @@
+import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class MessageTest {
 
-    @Test
-    public void testCheckMessageID() {
-        Message m = new Message("+27717265217", "Hi Mimi", 0);
-        assertTrue(m.checkMessageID());
-        assertEquals(10, m.getMessageID().length());
+    @Before
+    public void setUp() {
+        Message.populateTestData();
     }
 
     @Test
-    public void testRecipientSuccess() {
-        Message m = new Message("+27717265217", "Hello", 0);
-        assertEquals("Cell phone number successfully captured.", m.checkRecipientCell());
+    public void testPopulateAndSenderRecipient() {
+        String result = Message.displaySenderAndRecipient();
+        assertTrue(result.contains("+27838884567"));
+        assertTrue(result.contains("0838884567"));
     }
 
     @Test
-    public void testRecipientFail() {
-        Message m = new Message("07717265217", "Hello", 0);
-        assertEquals("Cell phone number is incorrectly formatted or does not contain an international code. Please correct the number and try again.", m.checkRecipientCell());
+    public void testLongestMessage() {
+        assertEquals("Where are you? You are late! I have asked you to be on time.", Message.getLongestMessage());
     }
 
     @Test
-    public void testMessageLengthSuccess() {
-        Message m = new Message("+27717265217", "i love you mimi", 0);
-        assertEquals("Message ready to send.", m.checkMessageLength());
+    public void testSearchByMessageID() {
+        String id = Message.allMessages.get(0).messageID;
+        String result = Message.searchByMessageID(id);
+        assertTrue(result.contains("Did you get the cake?"));
     }
 
     @Test
-    public void testMessageLengthFail() {
-        String longMsg = "a".repeat(300);
-        Message m = new Message("+27717265217", longMsg, 0);
-        assertTrue(m.checkMessageLength().contains("exceeds 250"));
+    public void testSearchByRecipient() {
+        String result = Message.searchByRecipient("+27838884567");
+        assertTrue(result.contains("Where are you? You are late!"));
+        assertTrue(result.contains("Ok, I am leaving without you."));
     }
 
     @Test
-    public void testCreateMessageHash() {
-        Message m = new Message("+27717265217", "Hi Mimi", 0);
-        String hash = m.createMessageHash();
-        
-        assertTrue(hash.contains(":0:"));
-        assertTrue(hash.contains("HI"));
+    public void testDeleteByHash() {
+        String hash = Message.allMessages.get(1).createMessageHash();
+        String result = Message.deleteByHash(hash);
+        assertTrue(result.contains("successfully deleted"));
     }
 
     @Test
-    public void testSentMessageSend() {
-        Message m = new Message("+27717265217", "Test", 0);
-        assertEquals("Message successfully sent.", m.SentMessage("Send"));
-    }
-
-    @Test
-    public void testSentMessageStore() {
-        Message m = new Message("+27717265217", "Test", 0);
-        assertEquals("Message successfully stored.", m.SentMessage("Store"));
-    }
-
-    @Test
-    public void testSentMessageDisregard() {
-        Message m = new Message("+27717265217", "Test", 0);
-        assertEquals("Press 0 to delete the message.", m.SentMessage("Disregard"));
+    public void testDisplayReport() {
+        String report = Message.displayReport();
+        assertTrue(report.contains("Did you get the cake?"));
+        assertTrue(report.contains("It is dinner time!"));
     }
 }
